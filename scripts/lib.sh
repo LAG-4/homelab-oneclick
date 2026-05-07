@@ -51,6 +51,33 @@ ensure_env() {
   fi
 }
 
+check_docker_ready() {
+  if ! command -v docker >/dev/null 2>&1; then
+    echo "Docker is not installed. Install Docker Engine or Docker Desktop first:"
+    echo "https://docs.docker.com/engine/install/"
+    return 1
+  fi
+
+  if ! docker compose version >/dev/null 2>&1; then
+    echo "Docker Compose v2 is not available. Install the Docker Compose plugin:"
+    echo "https://docs.docker.com/compose/install/linux/"
+    return 1
+  fi
+
+  if ! docker info >/dev/null 2>&1; then
+    echo "Docker is installed, but the Docker daemon is not reachable."
+    echo
+    echo "Common fixes:"
+    echo "  Linux/systemd:  sudo systemctl enable --now docker"
+    echo "  Docker Desktop: start/open Docker Desktop and wait until it says it is running"
+    echo "  WSL2:           start Docker Desktop on Windows and enable WSL integration"
+    echo
+    echo "If you recently ran 'sudo usermod -aG docker \"$USER\"', log out and back in."
+    echo "Then test with: docker info"
+    return 1
+  fi
+}
+
 create_dirs() {
   mkdir -p \
     "${CONFIG_DIR:-./config}/jellyfin" \

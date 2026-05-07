@@ -15,6 +15,43 @@ Use `doctor.sh` before starting services. Use `check.sh` after services are runn
 docker compose ps
 ```
 
+## Docker Daemon Is Not Running
+
+Error:
+
+```text
+failed to connect to the docker API at unix:///var/run/docker.sock
+```
+
+This means Docker is installed, but the daemon is not running or your user cannot access it.
+
+Linux with systemd:
+
+```bash
+sudo systemctl enable --now docker
+docker info
+```
+
+Docker Desktop:
+
+1. Open Docker Desktop.
+2. Wait until it says Docker is running.
+3. Run `docker info`.
+
+WSL2:
+
+1. Start Docker Desktop on Windows.
+2. Enable WSL integration for your distro in Docker Desktop settings.
+3. Restart the terminal and run `docker info`.
+
+If you recently added yourself to the Docker group:
+
+```bash
+sudo usermod -aG docker "$USER"
+```
+
+Log out and back in before trying again.
+
 ## Read Logs
 
 ```bash

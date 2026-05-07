@@ -13,7 +13,10 @@ Check that it works:
 ```bash
 docker --version
 docker compose version
+docker info
 ```
+
+`docker info` must succeed. If it cannot connect to `/var/run/docker.sock`, Docker is installed but the daemon is not running or your user cannot access it.
 
 On Linux, add your user to the `docker` group if you do not want to use `sudo`:
 
@@ -22,6 +25,14 @@ sudo usermod -aG docker "$USER"
 ```
 
 Log out and back in after running that.
+
+Start Docker on Linux systems that use systemd:
+
+```bash
+sudo systemctl enable --now docker
+```
+
+On Docker Desktop, open the app and wait until Docker is running before starting the stack.
 
 ## 2. Clone And Boot
 

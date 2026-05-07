@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+# shellcheck source=scripts/lib.sh
+. "$ROOT/scripts/lib.sh"
+
 ask() {
   local prompt="$1"
   local default="$2"
@@ -72,6 +75,7 @@ echo "Wrote .env"
 echo
 read -r -p "Start the core stack now? [Y/n]: " start_now
 if [ "${start_now:-Y}" != "n" ] && [ "${start_now:-Y}" != "N" ]; then
+  check_docker_ready
   ./scripts/bootstrap.sh
 else
   echo "Run ./scripts/bootstrap.sh when ready."
