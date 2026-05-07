@@ -11,13 +11,6 @@ This repo is a starter kit that wires together excellent open-source and free-to
 - FileBrowser: https://filebrowser.org/
 - rclone: https://rclone.org/
 
-## Monitoring
-
-- Prometheus: https://prometheus.io/
-- Grafana: https://grafana.com/
-- Node Exporter: https://github.com/prometheus/node_exporter
-- cAdvisor: https://github.com/google/cadvisor
-
 ## Optional Media Automation
 
 - Jellyseerr: https://docs.jellyseerr.dev/

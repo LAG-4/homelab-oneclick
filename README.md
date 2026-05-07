@@ -2,7 +2,7 @@
 
 A practical starter kit for turning an old laptop, mini PC, desktop, or VPS into a private cloud.
 
-The goal is simple: clone the repo, run one command, and get a working baseline with media streaming, file access, notes sync, monitoring, and a clean dashboard. You can then add remote access with Tailscale or Cloudflare Tunnel.
+The goal is simple: clone the repo, run one command, and get a working baseline with media streaming, file access, notes sync, and a clean dashboard. You can then add remote access with Tailscale or Cloudflare Tunnel.
 
 ## What You Get
 
@@ -15,10 +15,6 @@ Core stack:
 | FileBrowser | http://localhost:8081 | Browser-based file manager |
 | Notes FileBrowser | http://localhost:8090 | Notes/vault browser |
 | WebDAV | http://localhost:8091 | Notes/file sync endpoint |
-| Grafana | http://localhost:3000 | Metrics dashboards |
-| Prometheus | http://localhost:9090 | Metrics database |
-| Node Exporter | http://localhost:9100 | Host metrics |
-| cAdvisor | http://localhost:8082 | Container metrics |
 
 Optional media automation profile:
 
@@ -81,7 +77,6 @@ Edit `.env`:
 
 ```env
 TZ=Asia/Kolkata
-GRAFANA_ADMIN_PASSWORD=change-this
 WEBDAV_USER=your-user
 WEBDAV_PASS=change-this
 BIND_IP=0.0.0.0
@@ -126,7 +121,7 @@ Start private first. Tailscale is the easiest and safest path for personal acces
 
 Suggested split:
 
-- Tailscale: private admin services like Sonarr, Radarr, Grafana, Prometheus
+- Tailscale: private admin services like Sonarr, Radarr, Prowlarr, and qBittorrent
 - Cloudflare Tunnel: public-friendly services like Jellyfin, Jellyseerr, FileBrowser, Homepage
 
 ## Setup Guides
@@ -134,7 +129,6 @@ Suggested split:
 - [Full setup guide](docs/setup.md)
 - [Media stack guide](docs/media.md)
 - [Files, notes, and WebDAV](docs/files-and-notes.md)
-- [Monitoring guide](docs/monitoring.md)
 - [Remote access guide](docs/remote-access.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - [Security checklist](docs/security.md)
@@ -147,11 +141,10 @@ homelab-oneclick/
 ├── docker-compose.yml
 ├── .env.example
 ├── homepage/                 # Homepage dashboard config
-├── monitoring/               # Prometheus and Grafana provisioning
 ├── scripts/                  # Bootstrap/check/debug helpers
 ├── docs/                     # Setup and debugging docs
 ├── config/                   # Generated app configs, ignored by git
-├── data/                     # Generated monitoring/cache data, ignored by git
+├── data/                     # Generated cache data, ignored by git
 ├── downloads/                # Optional downloads folder, ignored by git
 ├── files/                    # FileBrowser-served files, ignored by git
 ├── media-samples/            # Starter media mount

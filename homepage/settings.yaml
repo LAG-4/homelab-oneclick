@@ -12,9 +12,6 @@ layout:
   Files & Notes:
     style: row
     columns: 3
-  Monitoring:
-    style: row
-    columns: 4
   Remote Access:
     style: row
     columns: 2

@@ -36,8 +36,6 @@ mkdir -p \
   "${CONFIG_DIR:-./config}/prowlarr" \
   "${CONFIG_DIR:-./config}/qbittorrent" \
   "${CONFIG_DIR:-./config}/bazarr" \
-  "${DATA_DIR:-./data}/prometheus" \
-  "${DATA_DIR:-./data}/grafana" \
   "${DATA_DIR:-./data}/jellyfin-cache" \
   "${DOWNLOADS_DIR:-./downloads}/torrents" \
   "${FILES_DIR:-./files}" \
@@ -71,6 +69,5 @@ echo "  Jellyfin:    http://localhost:8096"
 echo "  FileBrowser: http://localhost:8081"
 echo "  Notes:       http://localhost:8090"
 echo "  WebDAV:      http://localhost:8091"
-echo "  Grafana:     http://localhost:3000"
 echo
 echo "Run ./scripts/check.sh to verify service health."

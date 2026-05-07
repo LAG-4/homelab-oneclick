@@ -81,8 +81,6 @@ Keep these private unless you know exactly what you are doing:
 - Sonarr
 - Radarr
 - Prowlarr
-- Prometheus
-- cAdvisor
 - Docker socket
 
 Use Tailscale for these.

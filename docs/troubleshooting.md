@@ -76,12 +76,6 @@ Options:
 - /var/run/docker.sock:/var/run/docker.sock:ro
 ```
 
-## cAdvisor Fails On Some Hosts
-
-cAdvisor can be picky on macOS, WSL2, and some VPS providers because it expects Linux host paths.
-
-If cAdvisor fails but the rest works, disable it by commenting out the `cadvisor` service and removing its Prometheus target.
-
 ## Reset One Service
 
 This deletes that service's config. Use carefully.

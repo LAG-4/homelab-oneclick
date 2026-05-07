@@ -60,8 +60,7 @@ Recommended order:
 1. Open Homepage at `http://localhost:31337`
 2. Open Jellyfin at `http://localhost:8096` and create the first admin user.
 3. Open FileBrowser at `http://localhost:8081` and change the default login.
-4. Open Grafana at `http://localhost:3000`, login as `admin`, password from `.env`.
-5. Decide whether you want private remote access with Tailscale or public HTTPS with Cloudflare Tunnel.
+4. Decide whether you want private remote access with Tailscale or public HTTPS with Cloudflare Tunnel.
 
 ## 5. Add Real Storage
 

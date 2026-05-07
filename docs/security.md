@@ -3,9 +3,9 @@
 ## Before Exposing Anything
 
 - Change default passwords.
-- Use strong passwords for WebDAV, Grafana, FileBrowser, and app admin accounts.
+- Use strong passwords for WebDAV, FileBrowser, and app admin accounts.
 - Keep admin tools private behind Tailscale.
-- Do not expose qBittorrent, Sonarr, Radarr, Prowlarr, Prometheus, cAdvisor, or Docker socket publicly.
+- Do not expose qBittorrent, Sonarr, Radarr, Prowlarr, or Docker socket publicly.
 - Use Cloudflare Access or another auth layer for public dashboards.
 - Keep `.env` out of git.
 
@@ -13,13 +13,10 @@
 
 Private via Tailscale:
 
-- Grafana
-- Prometheus
 - Sonarr
 - Radarr
 - Prowlarr
 - qBittorrent
-- cAdvisor
 
 Public via Cloudflare Tunnel if needed:
 

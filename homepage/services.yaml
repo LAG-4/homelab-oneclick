@@ -32,28 +32,6 @@
         description: WebDAV endpoint for syncing notes/files.
         siteMonitor: http://webdav:8080
 
-- Monitoring:
-    - Grafana:
-        icon: grafana.png
-        href: http://localhost:3000
-        description: Metrics dashboards.
-        siteMonitor: http://grafana:3000
-    - Prometheus:
-        icon: prometheus.png
-        href: http://localhost:9090
-        description: Metrics database.
-        siteMonitor: http://prometheus:9090
-    - Node Exporter:
-        icon: prometheus.png
-        href: http://localhost:9100
-        description: Host metrics exporter.
-        siteMonitor: http://node-exporter:9100
-    - cAdvisor:
-        icon: docker.png
-        href: http://localhost:8082
-        description: Docker container metrics.
-        siteMonitor: http://cadvisor:8080
-
 - Remote Access:
     - Tailscale:
         icon: tailscale.png
