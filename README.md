@@ -121,6 +121,12 @@ Use `BIND_IP=127.0.0.1` if you plan to expose services only through a reverse pr
 # Pull newer images and recreate services
 ./scripts/update.sh
 
+# Stop and remove project containers/networks
+./scripts/uninstall.sh
+
+# Completely wipe generated repo-local data and recreate placeholders
+./scripts/uninstall.sh --full
+
 # Start optional media automation tools
 ./scripts/start-arr.sh
 
@@ -154,6 +160,7 @@ Suggested split:
 - [Full setup guide](docs/setup.md)
 - [Architecture](docs/architecture.md)
 - [Operations guide](docs/operations.md)
+- [AI agent setup prompt](docs/ai-agent-prompt.md)
 - [Media stack guide](docs/media.md)
 - [Files, notes, and WebDAV](docs/files-and-notes.md)
 - [Remote access guide](docs/remote-access.md)

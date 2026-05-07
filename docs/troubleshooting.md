@@ -131,7 +131,6 @@ rm -rf config/jellyfin data/jellyfin-cache
 This deletes generated configs and data.
 
 ```bash
-./scripts/stop.sh
-rm -rf config data downloads notes
+./scripts/uninstall.sh --full
 ./scripts/bootstrap.sh
 ```

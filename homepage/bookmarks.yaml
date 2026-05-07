@@ -8,6 +8,9 @@
     - Operations:
         - icon: mdi-tools
           href: https://github.com/LAG-4/homelab-oneclick/blob/main/docs/operations.md
+    - AI Agent Prompt:
+        - icon: si-openai
+          href: https://github.com/LAG-4/homelab-oneclick/blob/main/docs/ai-agent-prompt.md
     - Jellyfin:
         - icon: jellyfin.png
           href: https://jellyfin.org/docs/

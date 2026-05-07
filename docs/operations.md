@@ -71,6 +71,38 @@ Run:
 
 Restore extracts the archive into the repo folder. Review what you are restoring before running it on a live server.
 
+## Uninstall
+
+Stop and remove only the Homelab Oneclick containers/networks:
+
+```bash
+./scripts/uninstall.sh
+```
+
+Completely wipe generated repo-local data so you can test a fresh setup again:
+
+```bash
+./scripts/uninstall.sh --full
+```
+
+This removes:
+
+- `.env`
+- `config/`
+- `data/`
+- `downloads/`
+- `files/`
+- `notes/`
+- `backups/`
+
+It does not uninstall Docker and does not delete the git repo itself.
+
+Also remove locally referenced Docker images:
+
+```bash
+./scripts/uninstall.sh --full --images
+```
+
 ## Update
 
 Run:
