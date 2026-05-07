@@ -3,8 +3,11 @@
 ## Check Everything
 
 ```bash
+./scripts/doctor.sh
 ./scripts/check.sh
 ```
+
+Use `doctor.sh` before starting services. Use `check.sh` after services are running.
 
 ## See Running Containers
 

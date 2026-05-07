@@ -28,10 +28,16 @@ Log out and back in after running that.
 ```bash
 git clone https://github.com/LAG-4/homelab-oneclick.git
 cd homelab-oneclick
+./scripts/setup.sh
+```
+
+For a default setup without prompts:
+
+```bash
 ./scripts/bootstrap.sh
 ```
 
-The script creates `.env`, makes required folders, and starts the `core` Docker Compose profile.
+The setup wizard writes `.env`, creates required folders, and can start the `core` Docker Compose profile. The bootstrap script creates `.env` from `.env.example` if needed and starts with defaults.
 
 ## 3. Open The Dashboard
 
@@ -78,14 +84,23 @@ DATA_DIR=/opt/homelab/data
 Create folders before starting:
 
 ```bash
-mkdir -p /mnt/storage/media/movies /mnt/storage/media/tv /mnt/storage/downloads /mnt/storage/notes
+mkdir -p /mnt/storage/media/movies /mnt/storage/media/tv /mnt/storage/downloads /mnt/storage/files /mnt/storage/notes
 ```
 
-## 6. Update
+## 6. Run Doctor
+
+Before debugging manually, run:
 
 ```bash
-docker compose pull
-docker compose --profile core up -d
+./scripts/doctor.sh
+```
+
+It checks Docker, Compose, port conflicts, disk, memory, folder permissions, and Compose validity.
+
+## 7. Update
+
+```bash
+./scripts/update.sh
 ```
 
 If you use optional services:

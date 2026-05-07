@@ -73,6 +73,8 @@ files.example.com    -> http://filebrowser:80
 requests.example.com -> http://jellyseerr:5055
 ```
 
+See `cloudflare/config.example.yml` for a local-config style ingress example. Most beginners should use token-based tunnels from the Cloudflare dashboard.
+
 ## What Not To Expose Publicly
 
 Keep these private unless you know exactly what you are doing:

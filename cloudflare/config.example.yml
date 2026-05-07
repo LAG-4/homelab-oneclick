@@ -1,0 +1,27 @@
+# Example config for a locally managed Cloudflare Tunnel.
+# Token-based tunnels are easier for most users, but this is useful if you want
+# to understand the hostname mapping.
+#
+# Docs:
+# https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/ingress/
+
+tunnel: YOUR_TUNNEL_ID
+credentials-file: /etc/cloudflared/YOUR_TUNNEL_ID.json
+
+ingress:
+  - hostname: home.example.com
+    service: http://homepage:3000
+
+  - hostname: media.example.com
+    service: http://jellyfin:8096
+
+  - hostname: files.example.com
+    service: http://filebrowser:80
+
+  - hostname: notes.example.com
+    service: http://notes-web:80
+
+  - hostname: requests.example.com
+    service: http://jellyseerr:5055
+
+  - service: http_status:404

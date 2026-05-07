@@ -2,6 +2,12 @@
     - Homelab Oneclick:
         - icon: github.png
           href: https://github.com/LAG-4/homelab-oneclick
+    - Architecture:
+        - icon: mdi-diagram
+          href: https://github.com/LAG-4/homelab-oneclick/blob/main/docs/architecture.md
+    - Operations:
+        - icon: mdi-tools
+          href: https://github.com/LAG-4/homelab-oneclick/blob/main/docs/operations.md
     - Jellyfin:
         - icon: jellyfin.png
           href: https://jellyfin.org/docs/

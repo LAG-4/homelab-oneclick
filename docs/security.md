@@ -49,6 +49,12 @@ Back up:
 - `notes/`
 - any real media metadata you care about
 
+Use:
+
+```bash
+./scripts/backup.sh
+```
+
 Do not publish backups. They often contain API keys, auth cookies, app databases, and private paths.
 
 ## Secrets Scan

@@ -46,6 +46,16 @@ Install Docker:
 
 ## Quick Start
 
+Recommended first run:
+
+```bash
+git clone https://github.com/LAG-4/homelab-oneclick.git
+cd homelab-oneclick
+./scripts/setup.sh
+```
+
+Fast path with defaults:
+
 ```bash
 git clone https://github.com/LAG-4/homelab-oneclick.git
 cd homelab-oneclick
@@ -87,6 +97,12 @@ Use `BIND_IP=127.0.0.1` if you plan to expose services only through a reverse pr
 ## Common Commands
 
 ```bash
+# Interactive setup wizard
+./scripts/setup.sh
+
+# Check Docker, ports, disk, permissions, and compose validity
+./scripts/doctor.sh
+
 # Start the core stack
 ./scripts/bootstrap.sh
 
@@ -95,6 +111,15 @@ Use `BIND_IP=127.0.0.1` if you plan to expose services only through a reverse pr
 
 # Show logs for one service
 ./scripts/debug.sh jellyfin
+
+# Back up config, env, homepage, and notes
+./scripts/backup.sh
+
+# Restore a backup
+./scripts/restore.sh backups/homelab-oneclick-YYYYMMDD-HHMMSS.tar.gz
+
+# Pull newer images and recreate services
+./scripts/update.sh
 
 # Start optional media automation tools
 ./scripts/start-arr.sh
@@ -127,6 +152,8 @@ Suggested split:
 ## Setup Guides
 
 - [Full setup guide](docs/setup.md)
+- [Architecture](docs/architecture.md)
+- [Operations guide](docs/operations.md)
 - [Media stack guide](docs/media.md)
 - [Files, notes, and WebDAV](docs/files-and-notes.md)
 - [Remote access guide](docs/remote-access.md)
@@ -140,6 +167,7 @@ Suggested split:
 homelab-oneclick/
 ├── docker-compose.yml
 ├── .env.example
+├── cloudflare/               # Example Cloudflare Tunnel config
 ├── homepage/                 # Homepage dashboard config
 ├── scripts/                  # Bootstrap/check/debug helpers
 ├── docs/                     # Setup and debugging docs
@@ -148,7 +176,8 @@ homelab-oneclick/
 ├── downloads/                # Optional downloads folder, ignored by git
 ├── files/                    # FileBrowser-served files, ignored by git
 ├── media-samples/            # Starter media mount
-└── notes/                    # Starter notes/WebDAV mount
+├── notes/                    # Starter notes/WebDAV mount
+└── backups/                  # Generated backups, ignored by git
 ```
 
 ## Security Notes
