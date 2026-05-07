@@ -37,7 +37,11 @@ check_cmd() {
 check_port() {
   local port="$1"
   local name="$2"
-  if command -v ss >/dev/null 2>&1 && ss -ltn "( sport = :$port )" 2>/dev/null | grep -q ":$port"; then
+  local service="${3:-}"
+
+  if [ -n "$service" ] && docker info >/dev/null 2>&1 && docker compose ps --services --filter status=running 2>/dev/null | grep -qx "$service"; then
+    ok "port $port for $name is used by this Homelab Oneclick service"
+  elif command -v ss >/dev/null 2>&1 && ss -ltn "( sport = :$port )" 2>/dev/null | grep -q ":$port"; then
     note "port $port for $name is already in use"
   elif command -v lsof >/dev/null 2>&1 && lsof -i ":$port" >/dev/null 2>&1; then
     note "port $port for $name is already in use"
@@ -63,6 +67,8 @@ if docker info >/dev/null 2>&1; then
   ok "Docker daemon is reachable"
 else
   bad "Docker daemon is not reachable"
+  echo
+  explain_docker_error "$(docker info 2>&1 || true)"
 fi
 
 if [ -f .env ]; then
@@ -73,11 +79,11 @@ fi
 
 load_env
 
-check_port 31337 "Homepage"
-check_port 8096 "Jellyfin"
-check_port 8081 "FileBrowser"
-check_port 8090 "Notes FileBrowser"
-check_port 8091 "WebDAV"
+check_port 31337 "Homepage" "homepage"
+check_port 8096 "Jellyfin" "jellyfin"
+check_port 8081 "FileBrowser" "filebrowser"
+check_port 8090 "Notes FileBrowser" "notes-web"
+check_port 8091 "WebDAV" "webdav"
 
 echo
 echo "System resources:"

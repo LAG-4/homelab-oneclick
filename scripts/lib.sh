@@ -13,12 +13,22 @@ load_env() {
 }
 
 host_ip() {
-  if command -v hostname >/dev/null 2>&1; then
-    hostname -I 2>/dev/null | awk '{print $1}' && return
-  fi
+  local ip
 
   if command -v ip >/dev/null 2>&1; then
-    ip route get 1.1.1.1 2>/dev/null | awk '{for (i=1; i<=NF; i++) if ($i=="src") {print $(i+1); exit}}' && return
+    ip="$(ip route get 1.1.1.1 2>/dev/null | awk '{for (i=1; i<=NF; i++) if ($i=="src") {print $(i+1); exit}}')"
+    if [ -n "$ip" ]; then
+      echo "$ip"
+      return
+    fi
+  fi
+
+  if command -v hostname >/dev/null 2>&1; then
+    ip="$(hostname -I 2>/dev/null | awk '{print $1}')"
+    if [ -n "$ip" ]; then
+      echo "$ip"
+      return
+    fi
   fi
 
   echo "localhost"
@@ -52,6 +62,8 @@ ensure_env() {
 }
 
 check_docker_ready() {
+  local docker_error
+
   if ! command -v docker >/dev/null 2>&1; then
     echo "Docker is not installed. Install Docker Engine or Docker Desktop first:"
     echo "https://docs.docker.com/engine/install/"
@@ -64,18 +76,61 @@ check_docker_ready() {
     return 1
   fi
 
-  if ! docker info >/dev/null 2>&1; then
-    echo "Docker is installed, but the Docker daemon is not reachable."
-    echo
-    echo "Common fixes:"
-    echo "  Linux/systemd:  sudo systemctl enable --now docker"
-    echo "  Docker Desktop: start/open Docker Desktop and wait until it says it is running"
-    echo "  WSL2:           start Docker Desktop on Windows and enable WSL integration"
-    echo
-    echo "If you recently ran 'sudo usermod -aG docker \"$USER\"', log out and back in."
-    echo "Then test with: docker info"
-    return 1
+  if docker info >/dev/null 2>&1; then
+    return 0
   fi
+
+  docker_error="$(docker info 2>&1 || true)"
+  explain_docker_error "$docker_error"
+  return 1
+}
+
+explain_docker_error() {
+  local docker_error="${1:-}"
+  local user_name="${USER:-$(id -un 2>/dev/null || echo user)}"
+
+  echo "Docker is installed, but Docker is not usable from this shell."
+  echo
+
+  if printf '%s' "$docker_error" | grep -qi 'permission denied'; then
+    echo "The Docker daemon is running, but this user does not have socket permission."
+    echo
+    echo "Fix it:"
+    echo "  sudo usermod -aG docker \"$user_name\""
+    echo
+    echo "Then apply the new group in one of these ways:"
+    echo "  1. Log out and back in, then run: ./scripts/bootstrap.sh"
+    echo "  2. Or run once without logging out: sg docker -c './scripts/install.sh'"
+    echo
+    echo "Test with:"
+    echo "  docker info"
+    return
+  fi
+
+  if printf '%s' "$docker_error" | grep -qi 'no such file or directory\|cannot connect\|is the docker daemon running'; then
+    echo "The Docker daemon does not appear to be running."
+    echo
+    echo "Linux/systemd:"
+    echo "  sudo systemctl enable --now docker"
+    echo
+    echo "Docker Desktop:"
+    echo "  Open Docker Desktop and wait until it says Docker is running."
+    echo
+    echo "WSL2:"
+    echo "  Start Docker Desktop on Windows and enable WSL integration for this distro."
+    echo
+    echo "Then test with:"
+    echo "  docker info"
+    return
+  fi
+
+  echo "Docker reported:"
+  printf '%s\n' "$docker_error" | sed 's/^/  /'
+  echo
+  echo "Common fixes:"
+  echo "  sudo systemctl enable --now docker"
+  echo "  sudo usermod -aG docker \"$user_name\""
+  echo "  docker info"
 }
 
 create_dirs() {

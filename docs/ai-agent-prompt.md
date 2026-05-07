@@ -39,10 +39,11 @@ Steps:
    ./scripts/doctor.sh
 7. If doctor reports failures, fix them before continuing.
 8. Run:
-   ./scripts/setup.sh
-   Use sensible defaults unless I provide specific paths.
+   ./scripts/install.sh
+   Use ./scripts/setup.sh instead only if I ask for custom paths or credentials.
 9. After setup, run:
    ./scripts/check.sh
+   Treat WebDAV HTTP 401 as healthy because auth is required.
 10. Print the local and LAN URLs for:
    - Homepage
    - Jellyfin
@@ -70,7 +71,7 @@ Install Homelab Oneclick from https://github.com/LAG-4/homelab-oneclick on this 
 
 Use defaults, keep services LAN-only, do not expose anything publicly, and do not enable optional media automation unless I ask.
 
-Check/install Docker, clone the repo, run ./scripts/doctor.sh, run ./scripts/bootstrap.sh, then run ./scripts/check.sh and print the URLs.
+Check/install Docker, clone the repo, run ./scripts/doctor.sh, run ./scripts/install.sh, then print the URLs.
 
 If Docker cannot be started or ports are already in use, stop and tell me the exact issue.
 ```

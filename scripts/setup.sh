@@ -6,12 +6,16 @@ cd "$ROOT"
 
 # shellcheck source=scripts/lib.sh
 . "$ROOT/scripts/lib.sh"
+load_env
 
 ask() {
   local prompt="$1"
   local default="$2"
   local value
-  read -r -p "${prompt} [${default}]: " value
+  if ! read -r -p "${prompt} [${default}]: " value; then
+    value=""
+    echo
+  fi
   echo "${value:-$default}"
 }
 
@@ -19,7 +23,9 @@ secret() {
   local prompt="$1"
   local default="$2"
   local value
-  read -r -s -p "${prompt} [hidden, press enter for default]: " value
+  if ! read -r -s -p "${prompt} [hidden, press enter for default]: " value; then
+    value=""
+  fi
   echo >&2
   echo "${value:-$default}"
 }
@@ -73,7 +79,10 @@ ENV
 echo
 echo "Wrote .env"
 echo
-read -r -p "Start the core stack now? [Y/n]: " start_now
+if ! read -r -p "Start the core stack now? [Y/n]: " start_now; then
+  start_now=""
+  echo
+fi
 if [ "${start_now:-Y}" != "n" ] && [ "${start_now:-Y}" != "N" ]; then
   check_docker_ready
   ./scripts/bootstrap.sh

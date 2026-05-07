@@ -26,6 +26,12 @@ sudo usermod -aG docker "$USER"
 
 Log out and back in after running that.
 
+If you are on Arch/CachyOS and just added the group, the current terminal may still not have the new group. Either log out and back in, or run the installer once with:
+
+```bash
+sg docker -c './scripts/install.sh'
+```
+
 Start Docker on Linux systems that use systemd:
 
 ```bash
@@ -45,10 +51,10 @@ cd homelab-oneclick
 For a default setup without prompts:
 
 ```bash
-./scripts/bootstrap.sh
+./scripts/install.sh
 ```
 
-The setup wizard writes `.env`, creates required folders, and can start the `core` Docker Compose profile. The bootstrap script creates `.env` from `.env.example` if needed and starts with defaults.
+The setup wizard writes `.env`, creates required folders, and can start the `core` Docker Compose profile. The install script creates `.env` from `.env.example` if needed, starts the core stack, runs health checks, and prints URLs.
 
 ## 3. Open The Dashboard
 
@@ -61,7 +67,7 @@ http://localhost:31337
 From another device on the same network:
 
 ```bash
-hostname -I
+./scripts/urls.sh
 ```
 
 Then open:

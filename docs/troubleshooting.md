@@ -52,6 +52,12 @@ sudo usermod -aG docker "$USER"
 
 Log out and back in before trying again.
 
+If you cannot log out yet, run the installer once inside the new group:
+
+```bash
+sg docker -c './scripts/install.sh'
+```
+
 ## Read Logs
 
 ```bash

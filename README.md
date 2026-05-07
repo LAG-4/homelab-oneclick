@@ -84,10 +84,11 @@ Steps:
    ./scripts/doctor.sh
 7. If doctor reports failures, fix them before continuing.
 8. Run:
-   ./scripts/setup.sh
-   Use sensible defaults unless I provide specific paths.
+   ./scripts/install.sh
+   Use ./scripts/setup.sh instead only if I ask for custom paths or credentials.
 9. After setup, run:
    ./scripts/check.sh
+   Treat WebDAV HTTP 401 as healthy because authentication is required.
 10. Print the local and LAN URLs for:
    - Homepage
    - Jellyfin
@@ -112,7 +113,15 @@ The longer prompt and a fully automated variant live in [docs/ai-agent-prompt.md
 
 ## Quick Start
 
-Recommended first run:
+Fastest path with defaults:
+
+```bash
+git clone https://github.com/LAG-4/homelab-oneclick.git
+cd homelab-oneclick
+./scripts/install.sh
+```
+
+Interactive first run:
 
 ```bash
 git clone https://github.com/LAG-4/homelab-oneclick.git
@@ -141,10 +150,10 @@ Then open:
 http://localhost:31337
 ```
 
-On another device on the same network, replace `localhost` with the server IP:
+On another device on the same network, replace `localhost` with the server IP shown by:
 
 ```bash
-hostname -I
+./scripts/urls.sh
 ```
 
 ## First Things To Change
@@ -166,6 +175,9 @@ Use `BIND_IP=127.0.0.1` if you plan to expose services only through a reverse pr
 # Interactive setup wizard
 ./scripts/setup.sh
 
+# Default install: bootstrap, check, print URLs
+./scripts/install.sh
+
 # Check Docker, ports, disk, permissions, and compose validity
 ./scripts/doctor.sh
 
@@ -174,6 +186,9 @@ Use `BIND_IP=127.0.0.1` if you plan to expose services only through a reverse pr
 
 # Check service health
 ./scripts/check.sh
+
+# Print local and LAN URLs
+./scripts/urls.sh
 
 # Show logs for one service
 ./scripts/debug.sh jellyfin

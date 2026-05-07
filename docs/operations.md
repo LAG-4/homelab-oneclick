@@ -31,6 +31,18 @@ Run:
 
 This checks the HTTP endpoints for the core services after they are started.
 
+WebDAV returns `401` when it is healthy because authentication is required. The check script treats that as OK.
+
+## URLs
+
+Run:
+
+```bash
+./scripts/urls.sh
+```
+
+This prints local URLs and a best-effort LAN IP using `ip route` first, with portable fallbacks.
+
 ## Backup
 
 Run:
