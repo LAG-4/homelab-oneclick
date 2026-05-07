@@ -26,7 +26,7 @@ Log out and back in after running that.
 ## 2. Clone And Boot
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/homelab-oneclick.git
+git clone https://github.com/LAG-4/homelab-oneclick.git
 cd homelab-oneclick
 ./scripts/bootstrap.sh
 ```

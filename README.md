@@ -51,7 +51,7 @@ Install Docker:
 ## Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/homelab-oneclick.git
+git clone https://github.com/LAG-4/homelab-oneclick.git
 cd homelab-oneclick
 ./scripts/bootstrap.sh
 ```
