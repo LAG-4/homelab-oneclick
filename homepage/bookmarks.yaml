@@ -1,0 +1,10 @@
+- Docs:
+    - Homelab Oneclick:
+        - icon: github.png
+          href: https://github.com/
+    - Jellyfin:
+        - icon: jellyfin.png
+          href: https://jellyfin.org/docs/
+    - Docker Compose:
+        - icon: docker.png
+          href: https://docs.docker.com/compose/

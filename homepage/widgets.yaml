@@ -1,0 +1,16 @@
+- resources:
+    cpu: true
+    memory: true
+    disk: /
+
+- search:
+    provider: duckduckgo
+    target: _blank
+
+- openmeteo:
+    label: Local Weather
+    latitude: 17.3850
+    longitude: 78.4867
+    timezone: Asia/Kolkata
+    units: metric
+    cache: 5

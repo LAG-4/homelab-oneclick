@@ -1,0 +1,249 @@
+name: homelab-oneclick
+
+x-common-env: &common-env
+  TZ: ${TZ:-UTC}
+  PUID: ${PUID:-1000}
+  PGID: ${PGID:-1000}
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    group_add:
+      - "109"
+    environment:
+      <<: *common-env
+    volumes:
+      - ${CONFIG_DIR:-./config}/jellyfin:/config
+      - ${DATA_DIR:-./data}/jellyfin-cache:/cache
+      - ${MEDIA_DIR:-./media-samples}:/media
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8096:8096"
+    restart: unless-stopped
+    profiles: ["core", "media"]
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    user: "${PUID:-1000}:${PGID:-1000}"
+    command: ["-r", "/srv", "-d", "/database/filebrowser.db", "-a", "0.0.0.0"]
+    volumes:
+      - ${FILES_DIR:-./files}:/srv
+      - ${CONFIG_DIR:-./config}/filebrowser:/database
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8081:80"
+    restart: unless-stopped
+    profiles: ["core", "files"]
+
+  notes-web:
+    image: filebrowser/filebrowser:latest
+    container_name: notes-web
+    user: "${PUID:-1000}:${PGID:-1000}"
+    command: ["-r", "/srv", "-d", "/database/filebrowser.db", "-a", "0.0.0.0"]
+    volumes:
+      - ${NOTES_DIR:-./notes}:/srv
+      - ${CONFIG_DIR:-./config}/notes-filebrowser:/database
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8090:80"
+    restart: unless-stopped
+    profiles: ["core", "notes"]
+
+  webdav:
+    image: rclone/rclone:latest
+    container_name: webdav
+    user: "${PUID:-1000}:${PGID:-1000}"
+    command:
+      - serve
+      - webdav
+      - /data
+      - --addr
+      - :8080
+      - --user
+      - ${WEBDAV_USER:-homelab}
+      - --pass
+      - ${WEBDAV_PASS:-change-me}
+    volumes:
+      - ${NOTES_DIR:-./notes}:/data
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8091:8080"
+    restart: unless-stopped
+    profiles: ["core", "notes"]
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_ALLOWED_HOSTS:-*}
+    volumes:
+      - ./homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "${BIND_IP:-0.0.0.0}:31337:3000"
+    restart: unless-stopped
+    profiles: ["core", "dashboard"]
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${DATA_DIR:-./data}/prometheus:/prometheus
+    ports:
+      - "${BIND_IP:-0.0.0.0}:9090:9090"
+    restart: unless-stopped
+    profiles: ["core", "monitoring"]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ${DATA_DIR:-./data}/grafana:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "${BIND_IP:-0.0.0.0}:3000:3000"
+    restart: unless-stopped
+    profiles: ["core", "monitoring"]
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/rootfs
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    ports:
+      - "${BIND_IP:-0.0.0.0}:9100:9100"
+    restart: unless-stopped
+    profiles: ["core", "monitoring"]
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8082:8080"
+    restart: unless-stopped
+    profiles: ["core", "monitoring"]
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      LOG_LEVEL: info
+      TZ: ${TZ:-UTC}
+    volumes:
+      - ${CONFIG_DIR:-./config}/jellyseerr:/app/config
+    ports:
+      - "${BIND_IP:-0.0.0.0}:5055:5055"
+    restart: unless-stopped
+    profiles: ["arr"]
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      <<: *common-env
+    volumes:
+      - ${CONFIG_DIR:-./config}/sonarr:/config
+      - ${MEDIA_DIR:-./media-samples}/tv:/tv
+      - ${DOWNLOADS_DIR:-./downloads}/torrents:/downloads
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8989:8989"
+    restart: unless-stopped
+    profiles: ["arr"]
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      <<: *common-env
+    volumes:
+      - ${CONFIG_DIR:-./config}/radarr:/config
+      - ${MEDIA_DIR:-./media-samples}/movies:/movies
+      - ${DOWNLOADS_DIR:-./downloads}/torrents:/downloads
+    ports:
+      - "${BIND_IP:-0.0.0.0}:7878:7878"
+    restart: unless-stopped
+    profiles: ["arr"]
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      <<: *common-env
+    volumes:
+      - ${CONFIG_DIR:-./config}/prowlarr:/config
+    ports:
+      - "${BIND_IP:-0.0.0.0}:9696:9696"
+    restart: unless-stopped
+    profiles: ["arr"]
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      <<: *common-env
+    volumes:
+      - ${CONFIG_DIR:-./config}/bazarr:/config
+      - ${MEDIA_DIR:-./media-samples}/movies:/movies
+      - ${MEDIA_DIR:-./media-samples}/tv:/tv
+    ports:
+      - "${BIND_IP:-0.0.0.0}:6767:6767"
+    restart: unless-stopped
+    profiles: ["arr"]
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      <<: *common-env
+      WEBUI_PORT: 8080
+    volumes:
+      - ${CONFIG_DIR:-./config}/qbittorrent:/config
+      - ${DOWNLOADS_DIR:-./downloads}/torrents:/downloads
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    restart: unless-stopped
+    profiles: ["arr"]
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      LOG_LEVEL: info
+      TZ: ${TZ:-UTC}
+    ports:
+      - "${BIND_IP:-0.0.0.0}:8191:8191"
+    restart: unless-stopped
+    profiles: ["arr"]
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:-}
+    restart: unless-stopped
+    profiles: ["cloudflare"]

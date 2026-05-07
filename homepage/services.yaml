@@ -1,0 +1,65 @@
+- Media:
+    - Jellyfin:
+        icon: jellyfin.png
+        href: http://localhost:8096
+        description: Stream your legally owned media.
+        siteMonitor: http://jellyfin:8096
+    - Jellyseerr:
+        icon: jellyseerr.png
+        href: http://localhost:5055
+        description: Optional request portal for Jellyfin.
+        siteMonitor: http://jellyseerr:5055
+    - qBittorrent:
+        icon: qbittorrent.png
+        href: http://localhost:8080
+        description: Optional download client. Use only for legal content.
+        siteMonitor: http://qbittorrent:8080
+
+- Files & Notes:
+    - FileBrowser:
+        icon: filebrowser.png
+        href: http://localhost:8081
+        description: Browser-based file manager for this repo/data folder.
+        siteMonitor: http://filebrowser
+    - Notes:
+        icon: obsidian.png
+        href: http://localhost:8090
+        description: FileBrowser scoped to the notes folder.
+        siteMonitor: http://notes-web
+    - WebDAV:
+        icon: webdav.png
+        href: http://localhost:8091
+        description: WebDAV endpoint for syncing notes/files.
+        siteMonitor: http://webdav:8080
+
+- Monitoring:
+    - Grafana:
+        icon: grafana.png
+        href: http://localhost:3000
+        description: Metrics dashboards.
+        siteMonitor: http://grafana:3000
+    - Prometheus:
+        icon: prometheus.png
+        href: http://localhost:9090
+        description: Metrics database.
+        siteMonitor: http://prometheus:9090
+    - Node Exporter:
+        icon: prometheus.png
+        href: http://localhost:9100
+        description: Host metrics exporter.
+        siteMonitor: http://node-exporter:9100
+    - cAdvisor:
+        icon: docker.png
+        href: http://localhost:8082
+        description: Docker container metrics.
+        siteMonitor: http://cadvisor:8080
+
+- Remote Access:
+    - Tailscale:
+        icon: tailscale.png
+        href: https://tailscale.com/kb/1017/install
+        description: Private VPN-style access to your server.
+    - Cloudflare Tunnel:
+        icon: cloudflare.png
+        href: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/
+        description: Public HTTPS access without port forwarding.
